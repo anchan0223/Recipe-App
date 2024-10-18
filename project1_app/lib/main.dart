@@ -33,7 +33,7 @@ class _MealMateHomeState extends State<MealMateHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[100],
+        backgroundColor: Colors.amber[100],
         centerTitle: true,
         title: const Text(
           'MealMate',
@@ -54,7 +54,7 @@ class _MealMateHomeState extends State<MealMateHome> {
                     // Implement search functionality here
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.pink[300], // background
+                    backgroundColor: const Color(0xFFFCD581), // background
                   ),
                   child: const Text('Search for a recipe!'),
                 ),
@@ -63,7 +63,7 @@ class _MealMateHomeState extends State<MealMateHome> {
                     // Implement filter functionality here
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[100],
+                    backgroundColor: const Color(0xFFFCD581),
                   ),
                   child: const Text(
                     'Filter by dietary\nrestrictions / allergies',
@@ -72,25 +72,35 @@ class _MealMateHomeState extends State<MealMateHome> {
                 ),
               ],
             ),
-            // Meal categories (Breakfast, Lunch, etc.)
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.pink[300],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: const [
-                  MealTypeButton('Breakfast'),
-                  MealTypeButton('Lunch'),
-                  MealTypeButton('Dinner'),
-                  MealTypeButton('Dessert'),
-                ],
-              ),
+            // Meal type section with stacked buttons
+            Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, // Center align buttons
+              children: [
+                const Center(
+                  // Center the "Meal Type" title
+                  child: Text(
+                    'Meal Type',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 16), // Space between title and buttons
+                MealTypeButton('Breakfast'),
+                const SizedBox(height: 10), // Space between buttons
+                MealTypeButton('Lunch'),
+                const SizedBox(height: 10),
+                MealTypeButton('Snack'),
+                const SizedBox(height: 10),
+                MealTypeButton('Dinner'),
+                const SizedBox(height: 10),
+                MealTypeButton('Drinks'),
+                const SizedBox(height: 10),
+                MealTypeButton('Dessert'),
+              ],
             ),
             // Bottom Navigation Buttons
             BottomNavigationBar(
-              backgroundColor: Colors.pink[100],
+              backgroundColor: const Color.fromARGB(255, 245, 247, 176),
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
@@ -130,9 +140,21 @@ class MealTypeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 24, color: Colors.black),
+      child: SizedBox(
+        width: 200,
+        child: ElevatedButton(
+          onPressed: () {
+            print('Selected $label');
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                const Color.fromARGB(255, 120, 182, 253), // Button color
+          ),
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 24, color: Colors.black),
+          ),
+        ),
       ),
     );
   }
