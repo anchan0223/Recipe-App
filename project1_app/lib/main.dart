@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'breakfast.dart';
 
 void main() {
   runApp(MealMateApp());
@@ -20,13 +21,90 @@ class MealMateHome extends StatefulWidget {
 }
 
 class _MealMateHomeState extends State<MealMateHome> {
-  int _selectedIndex = 0; // To keep track of the selected bottom navigation tab
+  int _selectedIndex = 0;
+  String _searchQuery = '';
+  bool _isGlutenFree = false;
+  bool _isDairyFree = false;
+  bool _isNutFree = false;
+  bool _isVegan = false;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    // You can add navigation logic based on the selected index here
+  }
+
+  void _showFilterSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Filter by Dietary Restrictions',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  CheckboxListTile(
+                    title: const Text("Gluten-Free"),
+                    value: _isGlutenFree,
+                    onChanged: (bool? value) {
+                      setModalState(() {
+                        _isGlutenFree = value ?? false;
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: const Text("Dairy-Free"),
+                    value: _isDairyFree,
+                    onChanged: (bool? value) {
+                      setModalState(() {
+                        _isDairyFree = value ?? false;
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: const Text("Nut-Free"),
+                    value: _isNutFree,
+                    onChanged: (bool? value) {
+                      setModalState(() {
+                        _isNutFree = value ?? false;
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: const Text("Vegan"),
+                    value: _isVegan,
+                    onChanged: (bool? value) {
+                      setModalState(() {
+                        _isVegan = value ?? false;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Add functionality to apply filters
+                      Navigator.pop(context); // Close the filter modal
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFCD581),
+                    ),
+                    child: const Text('Apply Filters'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -49,19 +127,32 @@ class _MealMateHomeState extends State<MealMateHome> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement search functionality here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFCD581), // background
+                Expanded(
+                  child: Container(
+                    height: 48,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFCD581),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search for a recipe...',
+                        hintStyle: TextStyle(color: Colors.black54),
+                        prefixIcon: Icon(Icons.search, color: Colors.black),
+                      ),
+                    ),
                   ),
-                  child: const Text('Search for a recipe!'),
                 ),
+                const SizedBox(width: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    // Implement filter functionality here
-                  },
+                  onPressed: _showFilterSheet,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFCD581),
                   ),
@@ -72,33 +163,41 @@ class _MealMateHomeState extends State<MealMateHome> {
                 ),
               ],
             ),
-            // Meal type section with stacked buttons
+            // Meal type section with buttons
             Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.center, // Center align buttons
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Center(
-                  // Center the "Meal Type" title
                   child: Text(
                     'Meal Type',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(height: 16), // Space between title and buttons
-                MealTypeButton('Breakfast'),
-                const SizedBox(height: 10), // Space between buttons
-                MealTypeButton('Lunch'),
+                const SizedBox(height: 16),
+                MealTypeButton(
+                  label: 'Breakfast',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BreakfastScreen(),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 10),
-                MealTypeButton('Snack'),
+                MealTypeButton(label: 'Lunch', onPressed: () {}),
                 const SizedBox(height: 10),
-                MealTypeButton('Dinner'),
+                MealTypeButton(label: 'Snack', onPressed: () {}),
                 const SizedBox(height: 10),
-                MealTypeButton('Drinks'),
+                MealTypeButton(label: 'Dinner', onPressed: () {}),
                 const SizedBox(height: 10),
-                MealTypeButton('Dessert'),
+                MealTypeButton(label: 'Drinks', onPressed: () {}),
+                const SizedBox(height: 10),
+                MealTypeButton(label: 'Dessert', onPressed: () {}),
               ],
             ),
-            // Bottom Navigation Buttons
+            // Bottom Navigation
             BottomNavigationBar(
               backgroundColor: const Color.fromARGB(255, 245, 247, 176),
               items: const [
@@ -119,10 +218,10 @@ class _MealMateHomeState extends State<MealMateHome> {
                   label: 'Grocery List',
                 ),
               ],
-              currentIndex: _selectedIndex, // Update the current index
+              currentIndex: _selectedIndex,
               selectedItemColor: Colors.black,
               unselectedItemColor: Colors.black,
-              onTap: _onItemTapped, // Handle tab changes
+              onTap: _onItemTapped,
             ),
           ],
         ),
@@ -133,8 +232,9 @@ class _MealMateHomeState extends State<MealMateHome> {
 
 class MealTypeButton extends StatelessWidget {
   final String label;
+  final VoidCallback onPressed;
 
-  const MealTypeButton(this.label);
+  const MealTypeButton({required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -143,12 +243,9 @@ class MealTypeButton extends StatelessWidget {
       child: SizedBox(
         width: 200,
         child: ElevatedButton(
-          onPressed: () {
-            print('Selected $label');
-          },
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor:
-                const Color.fromARGB(255, 120, 182, 253), // Button color
+            backgroundColor: const Color.fromARGB(255, 120, 182, 253),
           ),
           child: Text(
             label,
