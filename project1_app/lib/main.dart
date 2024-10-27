@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project1_app/favorites_screen.dart';
 import 'breakfast.dart';
 import 'meal_prep.dart'; // Ensure this import matches your meal prep screen file
 
@@ -23,6 +24,10 @@ class MealMateHome extends StatefulWidget {
 
 class _MealMateHomeState extends State<MealMateHome> {
   int _selectedIndex = 0;
+  
+  //favorite recipes
+  final List<Recipe> favoriteRecipes = [];
+ 
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,6 +39,24 @@ class _MealMateHomeState extends State<MealMateHome> {
           context,
           MaterialPageRoute(builder: (context) => MealPrepScreen()),
         );
+      }
+      //navigate to favorites screen
+      if(index == 2){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FavoritesScreen(favoriteRecipes: favoriteRecipes, toggleFavorite: toggleFavorite,)),
+        );
+      }
+    });
+  }
+
+  void toggleFavorite(Recipe recipe) {
+    setState(() {
+      recipe.isFavorite = !recipe.isFavorite;
+      if (recipe.isFavorite) {
+        favoriteRecipes.add(recipe);
+      } else {
+        favoriteRecipes.remove(recipe);
       }
     });
   }
@@ -96,7 +119,9 @@ class _MealMateHomeState extends State<MealMateHome> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BreakfastScreen(),
+                        builder: (context) => BreakfastScreen(
+                          toggleFavorite: toggleFavorite,
+                        ),
                       ),
                     );
                   },

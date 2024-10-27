@@ -1,26 +1,68 @@
+// recipe_detail.dart
 import 'package:flutter/material.dart';
-import 'breakfast.dart'; // Make sure to import the Recipe class
+import 'breakfast.dart';
 
-class RecipeDetailScreen extends StatelessWidget {
+class RecipeDetailScreen extends StatefulWidget {
+  //get recipe and toggleFavorite function
   final Recipe recipe;
+  final Function(Recipe) toggleFavorite;
 
-  RecipeDetailScreen({required this.recipe});
+  //constructor
+  const RecipeDetailScreen({
+    Key? key,
+    required this.recipe,
+    required this.toggleFavorite,
+  }) : super(key: key);
+
+  @override
+  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+}
+
+class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+  //init state
+  late bool isFavorite;
+  bool hasFavoriteStatusChanged = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.recipe.isFavorite;
+  }
+
+  //toggle favorite function
+  void _toggleFavorite() {
+    setState(() {
+      widget.toggleFavorite(widget.recipe);
+      isFavorite = widget.recipe.isFavorite;
+      hasFavoriteStatusChanged = true;
+    });
+  }
+
+  //send favorite status to previous screen
+  void popWithResult() {
+    Navigator.pop(context, hasFavoriteStatusChanged ? widget.recipe : null);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(recipe.name),
+        title: Text(widget.recipe.name),
         backgroundColor: Colors.amber[100],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          //pop on back btn
+          onPressed: popWithResult,
+        ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Image.asset(
-                recipe.imageUrl,
+                widget.recipe.imageUrl,
                 width: 200,
                 height: 150,
                 fit: BoxFit.cover,
@@ -28,29 +70,23 @@ class RecipeDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              '${recipe.servings} servings | Cook time: ${recipe.cookTime} mins | Prep time: ${recipe.prepTime} mins',
+              '${widget.recipe.servings} servings | Cook time: ${widget.recipe.cookTime} mins | Prep time: ${widget.recipe.prepTime} mins',
               style: const TextStyle(fontSize: 18),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    recipe.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  ),
-                  color: recipe.isFavorite ? Colors.red : Colors.black,
-                  onPressed: () {
-                    // Handle favorite toggle (if needed)
-                  },
-                ),
-              ],
+            IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.red : Colors.black,
+              ),
+              //toggle favorite
+              onPressed: _toggleFavorite,
             ),
             const SizedBox(height: 20),
             const Text(
               'Ingredients:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            ...recipe.ingredients.map((ingredient) => Row(
+            ...widget.recipe.ingredients.map((ingredient) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(ingredient),
@@ -67,10 +103,30 @@ class RecipeDetailScreen extends StatelessWidget {
               'Instructions:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            ...recipe.instructions.map((instruction) => Text(instruction)),
+            ListView.builder(
+              //display within scroll view
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+
+              itemCount: widget.recipe.instructions.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Text(
+                    '${index + 1}. ${widget.recipe.instructions[index]}',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project1_app/favorites_screen.dart';
+import 'recipe_detail.dart';
+import 'favorites_screen.dart';
 
 class Recipe {
   final String name;
@@ -74,24 +77,43 @@ List<Recipe> breakfastRecipes = [
     instructions: [
       'Whisk milk, eggs, cinnamon into a bowl',
       'Dip bread into the mixture, soaking both sides',
-      'Cook on hot skillet until golden brown'
+      'Cook on hot skillet until golden brown',
+      
+      
     ],
   ),
+  
 ];
 
 class BreakfastScreen extends StatefulWidget {
+  //toggle favorite
+  final Function(Recipe) toggleFavorite;
+
+  //constructor
+  const BreakfastScreen({Key? key, required this.toggleFavorite}): super(key: key);
+
   @override
   _BreakfastScreenState createState() => _BreakfastScreenState();
 }
 
 class _BreakfastScreenState extends State<BreakfastScreen> {
-  void _openRecipeDetail(BuildContext context, Recipe recipe) {
-    Navigator.push(
+  //open recipe details
+  void _openRecipeDetail(BuildContext context, Recipe recipe) async {
+    //wait for favorite status change
+    final updatedRecipe = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RecipeDetailScreen(recipe: recipe),
+        builder: (context) => RecipeDetailScreen(
+          recipe: recipe,
+          toggleFavorite: widget.toggleFavorite,
+        ),
       ),
     );
+
+    //referesh if favorite status changed
+    if (updatedRecipe != null) {
+      setState(() {});
+    }
   }
 
   @override
@@ -120,89 +142,16 @@ class _BreakfastScreenState extends State<BreakfastScreen> {
                   color: recipe.isFavorite ? Colors.red : null,
                 ),
                 onPressed: () {
-                  setState(() {
-                    recipe.isFavorite = !recipe.isFavorite;
-                  });
+                  //toggle favorite and update ui
+                  widget.toggleFavorite(recipe);
+                  setState(() {});
                 },
               ),
+              //open recipe details
               onTap: () => _openRecipeDetail(context, recipe),
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class RecipeDetailScreen extends StatelessWidget {
-  final Recipe recipe;
-
-  const RecipeDetailScreen({Key? key, required this.recipe}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(recipe.name),
-        backgroundColor: Colors.amber[100],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Image.asset(
-                recipe.imageUrl,
-                width: 200,
-                height: 150,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              '${recipe.servings} servings | Cook time: ${recipe.cookTime} mins | Prep time: ${recipe.prepTime} mins',
-              style: const TextStyle(fontSize: 18),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    recipe.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  ),
-                  color: recipe.isFavorite ? Colors.red : Colors.black,
-                  onPressed: () {
-                    // Handle favorite toggle (if needed)
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Ingredients:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            ...recipe.ingredients.map((ingredient) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(ingredient),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle add to grocery list action
-                      },
-                      child: const Text('Add to grocery list'),
-                    ),
-                  ],
-                )),
-            const SizedBox(height: 20),
-            const Text(
-              'Instructions:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            ...recipe.instructions.map((instruction) => Text(instruction)),
-          ],
-        ),
       ),
     );
   }
