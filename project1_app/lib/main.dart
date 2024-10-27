@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'breakfast.dart';
+import 'meal_prep.dart'; // Ensure this import matches your meal prep screen file
 
 void main() {
   runApp(MealMateApp());
@@ -22,89 +23,19 @@ class MealMateHome extends StatefulWidget {
 
 class _MealMateHomeState extends State<MealMateHome> {
   int _selectedIndex = 0;
-  String _searchQuery = '';
-  bool _isGlutenFree = false;
-  bool _isDairyFree = false;
-  bool _isNutFree = false;
-  bool _isVegan = false;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-    });
-  }
 
-  void _showFilterSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setModalState) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Filter by Dietary Restrictions',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  CheckboxListTile(
-                    title: const Text("Gluten-Free"),
-                    value: _isGlutenFree,
-                    onChanged: (bool? value) {
-                      setModalState(() {
-                        _isGlutenFree = value ?? false;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text("Dairy-Free"),
-                    value: _isDairyFree,
-                    onChanged: (bool? value) {
-                      setModalState(() {
-                        _isDairyFree = value ?? false;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text("Nut-Free"),
-                    value: _isNutFree,
-                    onChanged: (bool? value) {
-                      setModalState(() {
-                        _isNutFree = value ?? false;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text("Vegan"),
-                    value: _isVegan,
-                    onChanged: (bool? value) {
-                      setModalState(() {
-                        _isVegan = value ?? false;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add functionality to apply filters
-                      Navigator.pop(context); // Close the filter modal
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFCD581),
-                    ),
-                    child: const Text('Apply Filters'),
-                  ),
-                ],
-              ),
-            );
-          },
+      // Navigate to the Meal Prep screen if the Meal Prep tab is clicked
+      if (index == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MealPrepScreen()),
         );
-      },
-    );
+      }
+    });
   }
 
   @override
@@ -123,7 +54,7 @@ class _MealMateHomeState extends State<MealMateHome> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Search and Filter Row
+            // Search Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -136,11 +67,6 @@ class _MealMateHomeState extends State<MealMateHome> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          _searchQuery = value;
-                        });
-                      },
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Search for a recipe...',
@@ -151,16 +77,6 @@ class _MealMateHomeState extends State<MealMateHome> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: _showFilterSheet,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFCD581),
-                  ),
-                  child: const Text(
-                    'Filter by dietary\nrestrictions / allergies',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               ],
             ),
             // Meal type section with buttons
