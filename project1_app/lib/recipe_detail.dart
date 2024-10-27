@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'breakfast.dart';
+import 'breakfast.dart'; // Make sure to import the Recipe class
 
 class RecipeDetailScreen extends StatelessWidget {
   final Recipe recipe;
@@ -19,16 +19,17 @@ class RecipeDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: Text(
-                recipe.name,
-                style:
-                    const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              child: Image.asset(
+                recipe.imageUrl,
+                width: 200,
+                height: 150,
+                fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 20),
             Text(
-              '# of servings | Cook time: # | Prep time: #',
-              style: const TextStyle(fontSize: 16),
+              '${recipe.servings} servings | Cook time: ${recipe.cookTime} mins | Prep time: ${recipe.prepTime} mins',
+              style: const TextStyle(fontSize: 18),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,70 +37,37 @@ class RecipeDetailScreen extends StatelessWidget {
                 IconButton(
                   icon: Icon(
                     recipe.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: recipe.isFavorite ? Colors.red : Colors.grey,
                   ),
+                  color: recipe.isFavorite ? Colors.red : Colors.black,
                   onPressed: () {
-                    // Toggle favorite functionality
+                    // Handle favorite toggle (if needed)
                   },
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add to meal plan functionality
-                  },
-                  child: const Text('Add to Meal Plan'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[300],
-                  ),
-                ),
               ],
             ),
-            const SizedBox(height: 16),
-            Center(
-              child: Image.asset(
-                recipe.imageUrl,
-                width: 200,
-                height: 200,
-                fit: BoxFit.cover,
-              ),
+            const SizedBox(height: 20),
+            const Text(
+              'Ingredients:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
-            const Text('Ingredients:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (int i = 1;
-                    i <= 3;
-                    i++) // Replace 3 with actual ingredient count
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Ingredient $i'), // Replace with actual ingredient
-                      ElevatedButton(
-                        onPressed: () {
-                          // Add ingredient to grocery list functionality
-                        },
-                        child: const Text('Add to grocery list'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber[200],
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
+            ...recipe.ingredients.map((ingredient) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(ingredient),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle add to grocery list action
+                      },
+                      child: const Text('Add to grocery list'),
+                    ),
+                  ],
+                )),
+            const SizedBox(height: 20),
+            const Text(
+              'Instructions:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
-            const Text('Instructions:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (int i = 1;
-                    i <= 3;
-                    i++) // Replace 3 with actual instruction count
-                  Text('$i. Instruction $i'), // Replace with actual instruction
-              ],
-            ),
+            ...recipe.instructions.map((instruction) => Text(instruction)),
           ],
         ),
       ),

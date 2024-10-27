@@ -176,12 +176,6 @@ class RecipeDetailScreen extends StatelessWidget {
                     // Handle favorite toggle (if needed)
                   },
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle add to meal plan action
-                  },
-                  child: const Text('Add to meal plan'),
-                ),
               ],
             ),
             const SizedBox(height: 20),
