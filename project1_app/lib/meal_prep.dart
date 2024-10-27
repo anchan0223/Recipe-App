@@ -8,20 +8,32 @@ class MealPrepScreen extends StatefulWidget {
 }
 
 class _MealPrepScreenState extends State<MealPrepScreen> {
-  // Map to hold the meal plan for each day
-  Map<String, List<Recipe>> mealPlan = {
-    'Monday': [],
-    'Tuesday': [],
-    'Wednesday': [],
-    'Thursday': [],
-    'Friday': [],
-    'Saturday': [],
-    'Sunday': [],
+  // Map to hold the selected breakfast recipe for each day
+  Map<String, Recipe?> mealPlan = {
+    'Monday': null,
+    'Tuesday': null,
+    'Wednesday': null,
+    'Thursday': null,
+    'Friday': null,
+    'Saturday': null,
+    'Sunday': null,
   };
 
-  void addRecipe(String day, Recipe recipe) {
+  // Selected breakfast recipe for each day
+  Map<String, String?> selectedBreakfast = {
+    'Monday': null,
+    'Tuesday': null,
+    'Wednesday': null,
+    'Thursday': null,
+    'Friday': null,
+    'Saturday': null,
+    'Sunday': null,
+  };
+
+  void selectRecipe(String day, Recipe recipe) {
     setState(() {
-      mealPlan[day]?.add(recipe);
+      mealPlan[day] = recipe; // Set the selected recipe for the specific day
+      selectedBreakfast[day] = recipe.name; // Store the selected recipe name
     });
   }
 
@@ -29,55 +41,56 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Meal Prep'),
+        title: const Text('Meal Prep'),
         backgroundColor: Colors.amber[100],
       ),
       body: ListView(
-        children: [
-          for (var day in mealPlan.keys) ...[
-            Text(day,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Column(
+        children: mealPlan.keys.map((day) {
+          return Card(
+            margin: const EdgeInsets.all(10),
+            child: Column(
               children: [
-                // Breakfast Section
-                Text('Breakfast',
+                ListTile(
+                  title: Text(day, style: TextStyle(fontSize: 24)),
+                  subtitle: selectedBreakfast[day] != null
+                      ? Text('Selected Recipe: ${selectedBreakfast[day]}')
+                      : const Text('No recipe selected'),
+                ),
+                // Dropdown for breakfast recipes
+                DropdownButton<Recipe>(
+                  hint: const Text('Select a Breakfast Recipe'),
+                  value: mealPlan[day],
+                  onChanged: (Recipe? newValue) {
+                    if (newValue != null) {
+                      selectRecipe(day, newValue);
+                    }
+                  },
+                  items: breakfastRecipes
+                      .map<DropdownMenuItem<Recipe>>((Recipe recipe) {
+                    return DropdownMenuItem<Recipe>(
+                      value: recipe,
+                      child: Text(recipe.name),
+                    );
+                  }).toList(),
+                ),
+                const Divider(),
+                // Placeholders for Lunch and Dinner sections
+                const Text('Lunch',
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                ...breakfastRecipes.map((recipe) {
-                  return ListTile(
-                    title: Text(recipe.name),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecipeDetailScreen(
-                            recipe: recipe,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-
-                // Placeholder for Lunch Section
-                Text('Lunch',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                Text('No lunch recipes added yet.',
+                const Text('No lunch recipes added yet.',
                     style: TextStyle(color: Colors.grey)),
-
-                // Placeholder for Dinner Section
-                Text('Dinner',
+                const SizedBox(height: 10),
+                const Text('Dinner',
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                Text('No dinner recipes added yet.',
+                const Text('No dinner recipes added yet.',
                     style: TextStyle(color: Colors.grey)),
-
-                Divider(),
+                const SizedBox(height: 10),
               ],
             ),
-          ],
-        ],
+          );
+        }).toList(),
       ),
     );
   }
