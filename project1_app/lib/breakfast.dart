@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project1_app/favorites_screen.dart';
 import 'recipe_detail.dart';
-import 'favorites_screen.dart';
 
 class Recipe {
   final String name;
@@ -34,11 +32,11 @@ List<Recipe> breakfastRecipes = [
     cookTime: 20,
     prepTime: 5,
     ingredients: [
-      '1 ½ cups all-purpose flour',
-      '3 ½ teaspoons baking powder',
+      '1 1/2 cups all-purpose flour',
+      '3 1/2 teaspoons baking powder',
       '1 tablespoon white sugar',
       '1 teaspoon salt',
-      '1 ¼ cups milk',
+      '1 1/4 cups milk',
       '3 tablespoons melted butter',
       '1 egg'
     ],
@@ -73,13 +71,36 @@ List<Recipe> breakfastRecipes = [
     servings: 3,
     cookTime: 10,
     prepTime: 5,
-    ingredients: ['Bread', 'Eggs', 'Milk', 'Butter', 'Cinnamon'],
+    ingredients: ['4 slices of bread', '2 Eggs', '1 cup Milk', '1 stick of Butter', '2 tbsp Cinnamon'],
     instructions: [
       'Whisk milk, eggs, cinnamon into a bowl',
       'Dip bread into the mixture, soaking both sides',
       'Cook on hot skillet until golden brown',
-      
-      
+    ],
+  ),
+  Recipe(
+    name: 'Avocado Toast',
+    imageUrl: 'assets/avocadotoast.jpg',
+    servings: 2,
+    cookTime: 5,
+    prepTime: 5,
+    ingredients: ['2 slices of bread', '1 Avocado', '1 tbsp Salt', '1 tbsp Pepper', '1 tbsp Red Pepper Flakes'],
+    instructions: [
+      'Toast bread until golden brown',
+      'Mash avocado and spread on toast',
+      'Sprinkle salt, pepper, and red pepper flakes on top',
+    ],
+  ),
+  Recipe(
+    name: 'Smoothie Bowl',
+    imageUrl: 'assets/smoothiebowl.jpg',
+    servings: 1,
+    cookTime: 5,
+    prepTime: 5,
+    ingredients: ['1/2 cup Frozen berries','1/2 cup Strawberries', '1 Banana', '1/4 cup Almond milk', '1 cup Granola'],
+    instructions: [
+      'Blend berries, strawberries, banana, and almond milk until smooth',
+      'Pour into bowl and top with granola and fresh fruit',
     ],
   ),
   
@@ -89,8 +110,11 @@ class BreakfastScreen extends StatefulWidget {
   //toggle favorite
   final Function(Recipe) toggleFavorite;
 
+  //add to grocery list
+  final Function(String) addToGroceryList;
+
   //constructor
-  const BreakfastScreen({Key? key, required this.toggleFavorite}): super(key: key);
+  const BreakfastScreen({Key? key, required this.toggleFavorite, required this.addToGroceryList}): super(key: key);
 
   @override
   _BreakfastScreenState createState() => _BreakfastScreenState();
@@ -106,6 +130,7 @@ class _BreakfastScreenState extends State<BreakfastScreen> {
         builder: (context) => RecipeDetailScreen(
           recipe: recipe,
           toggleFavorite: widget.toggleFavorite,
+          addToGroceryList: widget.addToGroceryList,
         ),
       ),
     );

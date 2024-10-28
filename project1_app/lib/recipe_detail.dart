@@ -1,4 +1,3 @@
-// recipe_detail.dart
 import 'package:flutter/material.dart';
 import 'breakfast.dart';
 
@@ -7,11 +6,15 @@ class RecipeDetailScreen extends StatefulWidget {
   final Recipe recipe;
   final Function(Recipe) toggleFavorite;
 
+  //get add to grocery list function
+  final Function(String) addToGroceryList;
+
   //constructor
   const RecipeDetailScreen({
     Key? key,
     required this.recipe,
     required this.toggleFavorite,
+    required this.addToGroceryList,
   }) : super(key: key);
 
   @override
@@ -42,6 +45,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   void popWithResult() {
     Navigator.pop(context, hasFavoriteStatusChanged ? widget.recipe : null);
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,18 +92,28 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               'Ingredients:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            ...widget.recipe.ingredients.map((ingredient) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(ingredient),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle add to grocery list action
-                      },
-                      child: const Text('Add to grocery list'),
-                    ),
-                  ],
-                )),
+            ...widget.recipe.ingredients.map((ingredient) {
+                  bool isAdded = false;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(ingredient),
+                      StatefulBuilder(
+                        builder: (context, setState) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              widget.addToGroceryList(ingredient);
+                              setState(() {
+                                isAdded = true;
+                              });
+                            },
+                            child: Text(isAdded ? 'Added' : 'Add to grocery list'),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }),
             const SizedBox(height: 20),
             const Text(
               'Instructions:',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project1_app/favorites_screen.dart';
+import 'favorites.dart';
+import 'grocery_list.dart';
 import 'breakfast.dart';
 import 'meal_prep.dart'; // Ensure this import matches your meal prep screen file
 
@@ -27,6 +28,10 @@ class _MealMateHomeState extends State<MealMateHome> {
   
   //favorite recipes
   final List<Recipe> favoriteRecipes = [];
+
+  //grocery list
+  final List<String> groceryList = [];
+  final List<String> checkedItems = [];
  
 
   void _onItemTapped(int index) {
@@ -44,7 +49,14 @@ class _MealMateHomeState extends State<MealMateHome> {
       if(index == 2){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => FavoritesScreen(favoriteRecipes: favoriteRecipes, toggleFavorite: toggleFavorite,)),
+          MaterialPageRoute(builder: (context) => FavoritesScreen(favoriteRecipes: favoriteRecipes, toggleFavorite: toggleFavorite, addToGroceryList: addToGroceryList,)),
+        );
+      }
+      //navigate to grocery list screen
+      if(index == 3){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GroceryListScreen(groceryList: groceryList, removeFromGroceryList: removeFromGroceryList, checkedItems: checkedItems)),
         );
       }
     });
@@ -61,6 +73,22 @@ class _MealMateHomeState extends State<MealMateHome> {
     });
   }
 
+  //add to grocery list
+  void addToGroceryList(String item) {
+    if (!groceryList.contains(item)) {
+      setState(() {
+        groceryList.add(item);
+      });
+    }
+  }
+
+  //remove from grovery list
+  void removeFromGroceryList(String item) {
+    setState(() {
+      groceryList.remove(item);
+      checkedItems.remove(item);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,6 +149,7 @@ class _MealMateHomeState extends State<MealMateHome> {
                       MaterialPageRoute(
                         builder: (context) => BreakfastScreen(
                           toggleFavorite: toggleFavorite,
+                          addToGroceryList: addToGroceryList,
                         ),
                       ),
                     );

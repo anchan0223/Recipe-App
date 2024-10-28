@@ -1,4 +1,3 @@
-// favorites_screen.dart
 import 'package:flutter/material.dart';
 import 'breakfast.dart';
 import 'recipe_detail.dart';
@@ -6,8 +5,9 @@ import 'recipe_detail.dart';
 class FavoritesScreen extends StatefulWidget {
   final List<Recipe> favoriteRecipes;
   final Function(Recipe) toggleFavorite;
+  final Function(String) addToGroceryList;
 
-  const FavoritesScreen({Key? key,required this.favoriteRecipes,required this.toggleFavorite,}) : super(key: key);
+  const FavoritesScreen({Key? key,required this.favoriteRecipes,required this.toggleFavorite, required this.addToGroceryList}) : super(key: key);
 
   @override
   _FavoritesScreenState createState() => _FavoritesScreenState();
@@ -60,6 +60,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           builder: (context) => RecipeDetailScreen(
                             recipe: recipe,
                             toggleFavorite: widget.toggleFavorite,
+                            addToGroceryList: widget.addToGroceryList,
                           ),
                         ),
                       ).then((_) => setState(() {})); //referesh screen
