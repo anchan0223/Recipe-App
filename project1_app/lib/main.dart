@@ -36,6 +36,34 @@ class _MealMateHomeState extends State<MealMateHome> {
   final List<String> groceryList = [];
   final List<String> checkedItems = [];
 
+  //maps to store meal plan data
+  Map<String, Recipe?> selectedBreakfast = {
+    'Monday': null,
+    'Tuesday': null,
+    'Wednesday': null,
+    'Thursday': null,
+    'Friday': null,
+    'Saturday': null,
+    'Sunday': null,
+  };
+  Map<String, Recipe?> selectedLunch = {
+    'Monday': null,
+    'Tuesday': null,
+    'Wednesday': null,
+    'Thursday': null,
+    'Friday': null,
+    'Saturday': null,
+    'Sunday': null,
+  };
+Map<String, Recipe?> selectedDinner = {
+    'Monday': null,
+    'Tuesday': null,
+    'Wednesday': null,
+    'Thursday': null,
+    'Friday': null,
+    'Saturday': null,
+    'Sunday': null,
+  };
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -44,7 +72,12 @@ class _MealMateHomeState extends State<MealMateHome> {
       if (index == 1) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MealPrepScreen()),
+          MaterialPageRoute(builder: (context) => MealPrepScreen(
+            breakfast: selectedBreakfast,
+            lunch: selectedLunch,
+            dinner: selectedDinner,
+            updateMealPlan: updateMealPlan,
+          )),
         );
       }
       //navigate to favorites screen
@@ -98,6 +131,19 @@ class _MealMateHomeState extends State<MealMateHome> {
     setState(() {
       groceryList.remove(item);
       checkedItems.remove(item);
+    });
+  }
+
+  //update meal plan function
+  void updateMealPlan(String day, Recipe recipe, String mealTime) {
+    setState(() {
+      if (mealTime == 'breakfast') {
+        selectedBreakfast[day] = recipe;
+      } else if (mealTime == 'lunch') {
+        selectedLunch[day] = recipe;
+      } else if (mealTime == 'dinner') {
+        selectedDinner[day] = recipe;
+      }
     });
   }
 
@@ -258,3 +304,4 @@ class MealTypeButton extends StatelessWidget {
     );
   }
 }
+

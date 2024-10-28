@@ -6,39 +6,42 @@ import 'dinner.dart';
 import 'recipe.dart';
 
 class MealPrepScreen extends StatefulWidget {
+  final Map<String, Recipe?> breakfast;
+  final Map<String, Recipe?> lunch;
+  final Map<String, Recipe?> dinner;
+  final Function(String, Recipe, String) updateMealPlan;
+
+  MealPrepScreen({required this.breakfast, required this.lunch, required this.dinner, required this.updateMealPlan});
   @override
-  _MealPrepScreenState createState() => _MealPrepScreenState();
+  _MealPrepScreenState createState() => _MealPrepScreenState( );
 }
 
 class _MealPrepScreenState extends State<MealPrepScreen> {
-  // Map to hold the selected recipe for each day
-  Map<String, Recipe?> mealPlan = {
-    'Monday': null,
-    'Tuesday': null,
-    'Wednesday': null,
-    'Thursday': null,
-    'Friday': null,
-    'Saturday': null,
-    'Sunday': null,
-  };
+  late Map<String, Recipe?> selectedBreakfast;
+  late Map<String, Recipe?> selectedLunch;
+  late Map<String, Recipe?> selectedDinner;
 
-  // Selected breakfast recipe for each day
-  Map<String, String?> selectedRecipe = {
-    'Monday': null,
-    'Tuesday': null,
-    'Wednesday': null,
-    'Thursday': null,
-    'Friday': null,
-    'Saturday': null,
-    'Sunday': null,
-  };
-
-  void selectRecipe(String day, Recipe recipe) {
-    setState(() {
-      mealPlan[day] = recipe; // Set the selected recipe for the specific day
-      selectedRecipe[day] = recipe.name; // Store the selected recipe name
-    });
+  @override
+  void initState() {
+    super.initState();
+    selectedBreakfast = Map.from(widget.breakfast);
+    selectedLunch = Map.from(widget.lunch);
+    selectedDinner = Map.from(widget.dinner);
   }
+
+  void _updateMealPlan(String day, Recipe recipe, String mealTime) {
+    setState(() {
+      if (mealTime == 'breakfast') {
+        selectedBreakfast[day] = recipe;
+      } else if (mealTime == 'lunch') {
+        selectedLunch[day] = recipe;
+      } else if (mealTime == 'dinner') {
+        selectedDinner[day] = recipe;
+      }
+    });
+    widget.updateMealPlan(day, recipe, mealTime);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,23 +51,22 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
         backgroundColor: Colors.amber[100],
       ),
       body: ListView(
-        children: mealPlan.keys.map((day) {
+        children: selectedBreakfast.keys.map((day) {
           return Card(
             margin: const EdgeInsets.all(10),
             child: Column(
               children: [
                 ListTile(
                   title: Text(day, style: TextStyle(fontSize: 24)),
-                  subtitle: selectedRecipe[day] != null
-                      ? Text('Selected Recipe: ${selectedRecipe[day]}')
-                      : const Text('No recipe selected'),
+                 
                 ),
+                //breakfast
                 DropdownButton<Recipe>(
                   hint: const Text('Select a Breakfast Recipe'),
-                  value: mealPlan[day],
+                  value: selectedBreakfast[day],
                   onChanged: (Recipe? newValue) {
                     if (newValue != null) {
-                      selectRecipe(day, newValue);
+                      _updateMealPlan(day, newValue, 'breakfast');
                     }
                   },
                   items: breakfastRecipes
@@ -75,12 +77,13 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
                     );
                   }).toList(),
                 ),
+                //lunch
                 DropdownButton<Recipe>(
                   hint: const Text('Select a Lunch Recipe'),
-                  value: mealPlan[day],
+                  value: selectedLunch[day],
                   onChanged: (Recipe? newValue) {
                     if (newValue != null) {
-                      selectRecipe(day, newValue);
+                      _updateMealPlan(day, newValue, 'lunch');
                     }
                   },
                   items: lunchRecipes
@@ -91,12 +94,13 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
                     );
                   }).toList(),
                 ),
+                //dinner
                 DropdownButton<Recipe>(
                   hint: const Text('Select a Dinner Recipe'),
-                  value: mealPlan[day],
+                  value: selectedDinner[day],
                   onChanged: (Recipe? newValue) {
                     if (newValue != null) {
-                      selectRecipe(day, newValue);
+                      _updateMealPlan(day, newValue, 'dinner');
                     }
                   },
                   items: dinnerRecipes
@@ -107,6 +111,7 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
                     );
                   }).toList(),
                 ),
+
               ],
             ),
           );
