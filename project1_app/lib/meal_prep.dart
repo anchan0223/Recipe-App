@@ -11,7 +11,7 @@ class MealPrepScreen extends StatefulWidget {
 }
 
 class _MealPrepScreenState extends State<MealPrepScreen> {
-  // Map to hold the selected breakfast recipe for each day
+  // Map to hold the selected recipe for each day
   Map<String, Recipe?> mealPlan = {
     'Monday': null,
     'Tuesday': null,
@@ -23,7 +23,7 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
   };
 
   // Selected breakfast recipe for each day
-  Map<String, String?> selectedBreakfast = {
+  Map<String, String?> selectedRecipe = {
     'Monday': null,
     'Tuesday': null,
     'Wednesday': null,
@@ -36,7 +36,7 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
   void selectRecipe(String day, Recipe recipe) {
     setState(() {
       mealPlan[day] = recipe; // Set the selected recipe for the specific day
-      selectedBreakfast[day] = recipe.name; // Store the selected recipe name
+      selectedRecipe[day] = recipe.name; // Store the selected recipe name
     });
   }
 
@@ -55,11 +55,10 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
               children: [
                 ListTile(
                   title: Text(day, style: TextStyle(fontSize: 24)),
-                  subtitle: selectedBreakfast[day] != null
-                      ? Text('Selected Recipe: ${selectedBreakfast[day]}')
+                  subtitle: selectedRecipe[day] != null
+                      ? Text('Selected Recipe: ${selectedRecipe[day]}')
                       : const Text('No recipe selected'),
                 ),
-                // Dropdown for breakfast recipes
                 DropdownButton<Recipe>(
                   hint: const Text('Select a Breakfast Recipe'),
                   value: mealPlan[day],
@@ -76,20 +75,38 @@ class _MealPrepScreenState extends State<MealPrepScreen> {
                     );
                   }).toList(),
                 ),
-                const Divider(),
-                // Placeholders for Lunch and Dinner sections
-                const Text('Lunch',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                const Text('No lunch recipes added yet.',
-                    style: TextStyle(color: Colors.grey)),
-                const SizedBox(height: 10),
-                const Text('Dinner',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                const Text('No dinner recipes added yet.',
-                    style: TextStyle(color: Colors.grey)),
-                const SizedBox(height: 10),
+                DropdownButton<Recipe>(
+                  hint: const Text('Select a Lunch Recipe'),
+                  value: mealPlan[day],
+                  onChanged: (Recipe? newValue) {
+                    if (newValue != null) {
+                      selectRecipe(day, newValue);
+                    }
+                  },
+                  items: lunchRecipes
+                      .map<DropdownMenuItem<Recipe>>((Recipe recipe) {
+                    return DropdownMenuItem<Recipe>(
+                      value: recipe,
+                      child: Text(recipe.name),
+                    );
+                  }).toList(),
+                ),
+                DropdownButton<Recipe>(
+                  hint: const Text('Select a Dinner Recipe'),
+                  value: mealPlan[day],
+                  onChanged: (Recipe? newValue) {
+                    if (newValue != null) {
+                      selectRecipe(day, newValue);
+                    }
+                  },
+                  items: dinnerRecipes
+                      .map<DropdownMenuItem<Recipe>>((Recipe recipe) {
+                    return DropdownMenuItem<Recipe>(
+                      value: recipe,
+                      child: Text(recipe.name),
+                    );
+                  }).toList(),
+                ),
               ],
             ),
           );

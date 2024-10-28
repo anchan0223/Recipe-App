@@ -5,99 +5,67 @@ import 'recipe.dart';
 // Sample lunch recipes
 List<Recipe> lunchRecipes = [
   Recipe(
-    name: 'Pancakes',
-    imageUrl: 'assets/pancakes.jpg',
-    servings: 4,
-    cookTime: 20,
+    name: 'Grilled Cheese',
+    imageUrl: 'assets/grilled-cheese.jpg',
+    servings: 2,
+    cookTime: 10,
     prepTime: 5,
     ingredients: [
-      '1 1/2 cups all-purpose flour',
-      '3 1/2 teaspoons baking powder',
-      '1 tablespoon white sugar',
-      '1 teaspoon salt',
-      '1 1/4 cups milk',
-      '3 tablespoons melted butter',
-      '1 egg'
+      '2 slices of white bread',
+      '2 tablespoons of butter',
+      '2 slices of cheeder cheese'
     ],
     instructions: [
-      'Gather all ingredients',
-      'Mix flour, baking powder, sugar, and salt in a large bowl. Whisk in milk, butter, and egg.',
-      'Heat skillet over medium-high heat and spray with cooking spray. Pour batter into skillet and cook till golden brown.'
+      'Butter one slide of bread. Place that butter side down on hot skillet.',
+      'Add slice of cheese. Butter the second slice and place butter side up on top of cheese.',
+      'Cook then flip until lightly browned.',
     ],
   ),
   Recipe(
-    name: 'Ham & Cheese Omelette',
-    imageUrl: 'assets/omelette.jpg',
-    servings: 1,
-    cookTime: 10,
+    name: 'Chicken Noodle Soup',
+    imageUrl: 'assets/chicken-noodle-soup.jpg',
+    servings: 6,
+    cookTime: 30,
     prepTime: 10,
     ingredients: [
-      '2 teaspoons vegetable oil',
-      '4 slices deli ham',
-      '2 eggs',
-      'fresh chives',
-      'Chedder cheese'
+      '2 cups cooked chicken, shredded',
+      '4 cups chicken broth',
+      '1 cup carrots, sliced',
+      '1 cup celery, sliced',
+      '1 cup egg noodles',
+      '1 onion, chopped',
+      '2 cloves garlic, minced'
     ],
     instructions: [
-      'Whisk egg and chives into a bowl. Add ham into the bowl',
-      'Pour mixture into skillet. Sprink cheddar on top and fold the omelette in half ',
-      'Flip and cook until egg is set'
+      'In a large pot, sauté onion and garlic until soft.',
+      'Add carrots and celery, cooking for 5 minutes.',
+      'Pour in chicken broth and bring to a boil.',
+      'Add egg noodles and cook according to package instructions.',
+      'Stir in chicken.',
+      'Simmer for 10 minutes.',
     ],
   ),
   Recipe(
-    name: 'French Toast',
-    imageUrl: 'assets/frenchtoast.jpg',
-    servings: 3,
+    name: 'Pasta Salad',
+    imageUrl: 'assets/pasta-salad.jpg',
+    servings: 6,
     cookTime: 10,
-    prepTime: 5,
+    prepTime: 20,
     ingredients: [
-      '4 slices of bread',
-      '2 Eggs',
-      '1 cup Milk',
-      '1 stick of Butter',
-      '2 tbsp Cinnamon'
+      '2 cups cooked pasta (any type)',
+      '1 cup cherry tomatoes, halved',
+      '1 cup cucumber, diced',
+      '1/2 cup red onion, diced',
+      '1 cup bell pepper, diced',
+      '1/4 cup olive oil',
+      '2 tablespoons red wine vinegar',
+      '1 teaspoon Italian seasoning'
     ],
     instructions: [
-      'Whisk milk, eggs, cinnamon into a bowl',
-      'Dip bread into the mixture, soaking both sides',
-      'Cook on hot skillet until golden brown',
-    ],
-  ),
-  Recipe(
-    name: 'Avocado Toast',
-    imageUrl: 'assets/avocadotoast.jpg',
-    servings: 2,
-    cookTime: 5,
-    prepTime: 5,
-    ingredients: [
-      '2 slices of bread',
-      '1 Avocado',
-      '1 tbsp Salt',
-      '1 tbsp Pepper',
-      '1 tbsp Red Pepper Flakes'
-    ],
-    instructions: [
-      'Toast bread until golden brown',
-      'Mash avocado and spread on toast',
-      'Sprinkle salt, pepper, and red pepper flakes on top',
-    ],
-  ),
-  Recipe(
-    name: 'Smoothie Bowl',
-    imageUrl: 'assets/smoothiebowl.jpg',
-    servings: 1,
-    cookTime: 5,
-    prepTime: 5,
-    ingredients: [
-      '1/2 cup Frozen berries',
-      '1/2 cup Strawberries',
-      '1 Banana',
-      '1/4 cup Almond milk',
-      '1 cup Granola'
-    ],
-    instructions: [
-      'Blend berries, strawberries, banana, and almond milk until smooth',
-      'Pour into bowl and top with granola and fresh fruit',
+      'In a large bowl, combine the cooked pasta, cherry tomatoes, cucumber, bell pepper, red onion.',
+      'In a small bowl, whisk together olive oil, red wine vinegar, Italian seasoning, salt, and pepper.',
+      'Pour the dressing over the pasta salad and toss to combine.',
+      'Chill in the refrigerator for at least 30 minutes before serving.',
     ],
   ),
 ];

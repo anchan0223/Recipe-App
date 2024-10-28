@@ -58,6 +58,12 @@ flutter:
     - assets/pancakes.jpg
     - assets/avocadotoast.jpg
     - assets/smoothiebowl.jpg
+    - assets/chicken-noodle-soup.jpg
+    - assets/chili.jpg
+    - assets/fried-rice.jpg
+    - assets/grilled-cheese.jpg
+    - assets/pasta-salad.jpg
+    - assets/stuffed-bell-peppers.jpg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
