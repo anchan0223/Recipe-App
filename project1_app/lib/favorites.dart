@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'breakfast.dart';
+import 'lunch.dart';
+import 'dinner.dart';
+import 'recipe.dart';
 import 'recipe_detail.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -7,7 +10,12 @@ class FavoritesScreen extends StatefulWidget {
   final Function(Recipe) toggleFavorite;
   final Function(String) addToGroceryList;
 
-  const FavoritesScreen({Key? key,required this.favoriteRecipes,required this.toggleFavorite, required this.addToGroceryList}) : super(key: key);
+  const FavoritesScreen(
+      {Key? key,
+      required this.favoriteRecipes,
+      required this.toggleFavorite,
+      required this.addToGroceryList})
+      : super(key: key);
 
   @override
   _FavoritesScreenState createState() => _FavoritesScreenState();
@@ -29,7 +37,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 style: TextStyle(fontSize: 18),
               ),
             )
-          : 
+          :
           //display list of favorites
           ListView.builder(
               itemCount: widget.favoriteRecipes.length,
@@ -49,7 +57,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       //handle unfavorite
                       onPressed: () {
                         setState(() {
-                          widget.toggleFavorite(recipe); //unfavorite 
+                          widget.toggleFavorite(recipe); //unfavorite
                         });
                       },
                     ),

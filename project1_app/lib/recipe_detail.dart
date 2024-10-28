@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'breakfast.dart';
+import 'lunch.dart';
+import 'dinner.dart';
+import 'recipe.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
   //get recipe and toggleFavorite function
@@ -46,9 +49,6 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     Navigator.pop(context, hasFavoriteStatusChanged ? widget.recipe : null);
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,27 +93,27 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             ...widget.recipe.ingredients.map((ingredient) {
-                  bool isAdded = false;
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(ingredient),
-                      StatefulBuilder(
-                        builder: (context, setState) {
-                          return ElevatedButton(
-                            onPressed: () {
-                              widget.addToGroceryList(ingredient);
-                              setState(() {
-                                isAdded = true;
-                              });
-                            },
-                            child: Text(isAdded ? 'Added' : 'Add to grocery list'),
-                          );
+              bool isAdded = false;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(ingredient),
+                  StatefulBuilder(
+                    builder: (context, setState) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          widget.addToGroceryList(ingredient);
+                          setState(() {
+                            isAdded = true;
+                          });
                         },
-                      ),
-                    ],
-                  );
-                }),
+                        child: Text(isAdded ? 'Added' : 'Add to grocery list'),
+                      );
+                    },
+                  ),
+                ],
+              );
+            }),
             const SizedBox(height: 20),
             const Text(
               'Instructions:',

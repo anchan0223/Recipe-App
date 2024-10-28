@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'recipe_detail.dart';
 import 'recipe.dart';
 
-// Sample breakfast recipes
-List<Recipe> breakfastRecipes = [
+// Sample dinner recipes
+List<Recipe> dinnerRecipes = [
   Recipe(
     name: 'Pancakes',
     imageUrl: 'assets/pancakes.jpg',
@@ -102,7 +102,7 @@ List<Recipe> breakfastRecipes = [
   ),
 ];
 
-class BreakfastScreen extends StatefulWidget {
+class DinnerScreen extends StatefulWidget {
   //toggle favorite
   final Function(Recipe) toggleFavorite;
 
@@ -110,15 +110,15 @@ class BreakfastScreen extends StatefulWidget {
   final Function(String) addToGroceryList;
 
   //constructor
-  const BreakfastScreen(
+  const DinnerScreen(
       {Key? key, required this.toggleFavorite, required this.addToGroceryList})
       : super(key: key);
 
   @override
-  _BreakfastScreenState createState() => _BreakfastScreenState();
+  _DinnerScreenState createState() => _DinnerScreenState();
 }
 
-class _BreakfastScreenState extends State<BreakfastScreen> {
+class _DinnerScreenState extends State<DinnerScreen> {
   //open recipe details
   void _openRecipeDetail(BuildContext context, Recipe recipe) async {
     //wait for favorite status change
@@ -143,13 +143,13 @@ class _BreakfastScreenState extends State<BreakfastScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Breakfast Recipes'),
+        title: const Text('Dinner Recipes'),
         backgroundColor: Colors.amber[100],
       ),
       body: ListView.builder(
-        itemCount: breakfastRecipes.length,
+        itemCount: dinnerRecipes.length,
         itemBuilder: (context, index) {
-          final recipe = breakfastRecipes[index];
+          final recipe = dinnerRecipes[index];
           return Card(
             margin: const EdgeInsets.all(10),
             child: ListTile(

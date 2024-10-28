@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'recipe_detail.dart';
 import 'breakfast.dart' hide RecipeDetailScreen;
+import 'lunch.dart' hide RecipeDetailScreen;
+import 'dinner.dart';
+import 'recipe.dart';
 
 class MealPrepScreen extends StatefulWidget {
   @override

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'favorites.dart';
 import 'grocery_list.dart';
 import 'breakfast.dart';
+import 'lunch.dart';
+import 'dinner.dart';
+import 'recipe.dart';
 import 'meal_prep.dart'; // Ensure this import matches your meal prep screen file
 
 void main() {
@@ -25,14 +28,13 @@ class MealMateHome extends StatefulWidget {
 
 class _MealMateHomeState extends State<MealMateHome> {
   int _selectedIndex = 0;
-  
+
   //favorite recipes
   final List<Recipe> favoriteRecipes = [];
 
   //grocery list
   final List<String> groceryList = [];
   final List<String> checkedItems = [];
- 
 
   void _onItemTapped(int index) {
     setState(() {
@@ -46,17 +48,26 @@ class _MealMateHomeState extends State<MealMateHome> {
         );
       }
       //navigate to favorites screen
-      if(index == 2){
+      if (index == 2) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => FavoritesScreen(favoriteRecipes: favoriteRecipes, toggleFavorite: toggleFavorite, addToGroceryList: addToGroceryList,)),
+          MaterialPageRoute(
+              builder: (context) => FavoritesScreen(
+                    favoriteRecipes: favoriteRecipes,
+                    toggleFavorite: toggleFavorite,
+                    addToGroceryList: addToGroceryList,
+                  )),
         );
       }
       //navigate to grocery list screen
-      if(index == 3){
+      if (index == 3) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GroceryListScreen(groceryList: groceryList, removeFromGroceryList: removeFromGroceryList, checkedItems: checkedItems)),
+          MaterialPageRoute(
+              builder: (context) => GroceryListScreen(
+                  groceryList: groceryList,
+                  removeFromGroceryList: removeFromGroceryList,
+                  checkedItems: checkedItems)),
         );
       }
     });
@@ -89,6 +100,7 @@ class _MealMateHomeState extends State<MealMateHome> {
       checkedItems.remove(item);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,15 +168,35 @@ class _MealMateHomeState extends State<MealMateHome> {
                   },
                 ),
                 const SizedBox(height: 10),
-                MealTypeButton(label: 'Lunch', onPressed: () {}),
+                MealTypeButton(
+                  label: 'Lunch',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LunchScreen(
+                          toggleFavorite: toggleFavorite,
+                          addToGroceryList: addToGroceryList,
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 10),
-                MealTypeButton(label: 'Snack', onPressed: () {}),
-                const SizedBox(height: 10),
-                MealTypeButton(label: 'Dinner', onPressed: () {}),
-                const SizedBox(height: 10),
-                MealTypeButton(label: 'Drinks', onPressed: () {}),
-                const SizedBox(height: 10),
-                MealTypeButton(label: 'Dessert', onPressed: () {}),
+                MealTypeButton(
+                  label: 'Dinner',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DinnerScreen(
+                          toggleFavorite: toggleFavorite,
+                          addToGroceryList: addToGroceryList,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
             // Bottom Navigation
