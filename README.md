@@ -2,7 +2,7 @@
 
 In order to run your application, type in terminal:
 
-  $ cd recipe_app
+  $ cd project1_app
   
   $ flutter run
 
