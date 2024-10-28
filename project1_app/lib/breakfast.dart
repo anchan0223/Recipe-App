@@ -119,6 +119,50 @@ class BreakfastScreen extends StatefulWidget {
 }
 
 class _BreakfastScreenState extends State<BreakfastScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _search = '';
+  Set<String> _allergies = {};
+
+  //list of allergies
+  final Set<String> _allergens = {
+    for (var recipe in breakfastRecipes)
+      for (var ingredient in recipe.ingredients)
+        if (ingredient.toLowerCase().contains(RegExp(r'\bmilk\b|\bcheese\b|\bbutter\b')))
+          'Dairy'
+        else if (ingredient.toLowerCase().contains('peanut'))
+          'Peanuts'
+        else if (ingredient.toLowerCase().contains('egg'))
+          'Egg'
+        else if (ingredient.toLowerCase().contains(RegExp(r'\bflour\b|\bbread\b')))
+        'Gluten'
+        else if (ingredient.toLowerCase().contains('shellfish'))
+          'Shellfish'
+        else if (ingredient.toLowerCase().contains('soy'))
+          'Soy'
+        else if (ingredient.toLowerCase().contains('nut') && !ingredient.toLowerCase().contains('peanut'))
+          'Tree Nuts'
+        else if (ingredient.toLowerCase().contains('fish'))
+          'Fish'
+  };
+
+  //filter based on search and return filtered recipes
+  List<Recipe> get filteredRecipes {
+    return breakfastRecipes.where((recipe) {
+      final matchesSearch = _search.isEmpty || recipe.name.toLowerCase().contains(_search.toLowerCase());
+      final excludesAllergen = !recipe.ingredients.any((ingredient) =>
+          _allergies.any((allergen) {
+            if (allergen == 'Dairy') {
+              return ingredient.toLowerCase().contains(RegExp(r'\bmilk\b|\bcheese\b|\bbutter\b'));
+            } else if (allergen == 'Gluten') {
+              return ingredient.toLowerCase().contains(RegExp(r'\bflour\b|\bbread\b'));
+            } else {
+              return ingredient.toLowerCase().contains(allergen.toLowerCase());
+            }
+          }));
+      return matchesSearch && excludesAllergen;
+    }).toList();
+  }
+
   //open recipe details
   void _openRecipeDetail(BuildContext context, Recipe recipe) async {
     //wait for favorite status change
@@ -142,40 +186,85 @@ class _BreakfastScreenState extends State<BreakfastScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Breakfast Recipes'),
-        backgroundColor: Colors.amber[100],
-      ),
-      body: ListView.builder(
-        itemCount: breakfastRecipes.length,
-        itemBuilder: (context, index) {
-          final recipe = breakfastRecipes[index];
-          return Card(
-            margin: const EdgeInsets.all(10),
-            child: ListTile(
-              leading: Image.asset(
-                recipe.imageUrl,
-                width: 100,
-                fit: BoxFit.cover,
+        appBar: AppBar(
+          title: const Text('Breakfast Recipes'),
+          backgroundColor: Colors.amber[100],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              TextField(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                      labelText: 'Search',
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Search for a recipe',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)))),
+                  onChanged: (input) {
+                    setState(() {
+                      _search = input;
+                    });
+                  }),
+              const SizedBox(height: 10),
+              //alergy filter
+              const Text('Filter by Allergen:'),
+              Wrap(
+                spacing: 10,
+                children: _allergens.map((allergen) => FilterChip(
+                  label: Text(allergen),
+                  selected: _allergies.contains(allergen),
+                   onSelected: (isSelected) {
+                      setState(() {
+                        if (isSelected) {
+                          _allergies.add(allergen);
+                        } else {
+                          _allergies.remove(allergen);
+                      }
+                      });
+                   },
+                )).toList(),
               ),
-              title: Text(recipe.name),
-              trailing: IconButton(
-                icon: Icon(
-                  recipe.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: recipe.isFavorite ? Colors.red : null,
+
+              const SizedBox(height: 10),
+
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredRecipes.length,
+                  itemBuilder: (context, index) {
+                    final recipe = filteredRecipes[index];
+                    return Card(
+                      margin: const EdgeInsets.all(10),
+                      child: ListTile(
+                        leading: Image.asset(
+                          recipe.imageUrl,
+                          width: 100,
+                          fit: BoxFit.cover,
+                        ),
+                        title: Text(recipe.name),
+                        trailing: IconButton(
+                          icon: Icon(
+                            recipe.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: recipe.isFavorite ? Colors.red : null,
+                          ),
+                          onPressed: () {
+                            //toggle favorite and update ui
+                            widget.toggleFavorite(recipe);
+                            setState(() {});
+                          },
+                        ),
+                        //open recipe details
+                        onTap: () => _openRecipeDetail(context, recipe),
+                      ),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  //toggle favorite and update ui
-                  widget.toggleFavorite(recipe);
-                  setState(() {});
-                },
-              ),
-              //open recipe details
-              onTap: () => _openRecipeDetail(context, recipe),
-            ),
-          );
-        },
-      ),
-    );
+              )
+            ],
+          ),
+        ));
   }
 }

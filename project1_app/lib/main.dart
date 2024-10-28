@@ -163,38 +163,14 @@ Map<String, Recipe?> selectedDinner = {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Search Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 48,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFCD581),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search for a recipe...',
-                        hintStyle: TextStyle(color: Colors.black54),
-                        prefixIcon: Icon(Icons.search, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-              ],
-            ),
+            
             // Meal type section with buttons
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Center(
                   child: Text(
-                    'Meal Type',
+                    'Select A Meal Time',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
